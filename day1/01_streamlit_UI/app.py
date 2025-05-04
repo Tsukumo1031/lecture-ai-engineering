@@ -32,11 +32,11 @@ st.header("基本的なUI要素")
 
 # テキスト入力
 st.subheader("テキスト入力")
-name = st.text_input("あなたの名前", "ゲスト")
+name = st.text_input("あなたの名前はなんですか", "ゲスト")
 st.write(f"こんにちは、{name}さん！")
 
 # ボタン
-# st.subheader("ボタン")
+# st.subheader("ボタンを押してください")
 # if st.button("クリックしてください"):
 #     st.success("ボタンがクリックされました！")
 
