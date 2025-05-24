@@ -11,6 +11,7 @@ import pickle
 import time
 import great_expectations as gx
 
+
 class DataLoader:
     """データロードを行うクラス"""
 
@@ -248,6 +249,35 @@ def test_model_performance():
     ), f"推論時間が長すぎます: {metrics['inference_time']}秒"
 
 
+def check_inference_time(model, X_test, threshold=1.0):
+    """推論時間がしきい値以下かどうかを検証"""
+    import time
+
+    start_time = time.perf_counter()
+    _ = model.predict(X_test)
+    duration = time.perf_counter() - start_time
+    print(f"[検証] 推論時間: {duration:.4f} 秒")
+    if duration > threshold:
+        print(f"❌ 推論時間がしきい値 {threshold} 秒 を超えています")
+        return False
+    print("✅ 推論時間は正常です")
+    return True
+
+
+def check_prediction_accuracy(model, X_test, y_test, baseline=0.75):
+    """推論精度がベースライン以上かどうかを検証"""
+    from sklearn.metrics import accuracy_score
+
+    y_pred = model.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    print(f"[検証] 推論精度: {acc:.4f}")
+    if acc < baseline:
+        print(f"❌ 精度がベースライン {baseline} を下回っています")
+        return False
+    print("✅ 精度はベースラインを満たしています")
+    return True
+
+
 if __name__ == "__main__":
     # データロード
     data = DataLoader.load_titanic_data()
@@ -285,3 +315,7 @@ if __name__ == "__main__":
     # ベースラインとの比較
     baseline_ok = ModelTester.compare_with_baseline(metrics)
     print(f"ベースライン比較: {'合格' if baseline_ok else '不合格'}")
+
+    # 個別検証の実行
+    check_inference_time(model, X_test, threshold=1.0)
+    check_prediction_accuracy(model, X_test, y_test, baseline=0.75)
