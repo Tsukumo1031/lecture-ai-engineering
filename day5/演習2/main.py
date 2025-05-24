@@ -17,7 +17,7 @@ class DataLoader:
 
     @staticmethod
     def load_titanic_data(
-        path="/home/keita/lecture-ai-engineering/day5/演習2/data/Titanic.csv",
+        path="/home/keita/lecture-ai-engineering/day5/演習2/data/Titanic.csv"
     ):
         """Titanicデータセットを読み込む"""
         if path:
